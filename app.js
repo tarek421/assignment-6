@@ -6,6 +6,7 @@ const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
 // selected image 
 let sliders = [];
+console.log(sliders);
 
 
 // If this key doesn't work
@@ -24,11 +25,15 @@ const showImages = (images) => {
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
+    toggleSpiners(false);
   })
 
 }
 const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+  const url = `https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`;
+  toggleSpiners(true)
+  fetch(url)
+  
     .then(response => response.json())
     .then(data => showImages(data.hits))
     //.then(data => console.log(data.hits))
@@ -43,7 +48,7 @@ const selectItem = (event, img) => {
   if (item === -1) {
     element.classList.add('added');
     sliders.push(img);
-  }else{
+  } else {
     element.classList.remove('added');
     sliders.pop(img);
   }
@@ -78,7 +83,7 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   })
   changeSlide(0)
-  
+
   // timer = setInterval(function () {
   //   slideIndex++;
   //   changeSlide(slideIndex);
@@ -132,14 +137,25 @@ enterKeyPress('duration', 'create-slider');
 // Nagative value is not allowed
 sliderBtn.addEventListener('click', function () {
   const duration = document.getElementById('duration').value || 1000;
-  if(duration > 0){
+  if (duration > 0) {
     //console.log("clicked button");
     createSlider();
     timer = setInterval(function () {
       slideIndex++;
       changeSlide(slideIndex);
     }, duration);
-  }else{
+  } else {
     alert('Nagative value is not allowed');
   }
 });
+
+//Added a Spiners
+
+const toggleSpiners = (show) => {
+  const spiner = document.getElementById('spiners');
+  if (show) {
+    spiner.classList.remove('d-none');
+  } else {
+    spiner.classList.add('d-none');
+  }
+}
