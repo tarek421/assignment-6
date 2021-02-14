@@ -42,14 +42,8 @@ const selectItem = (event, img) => {
 
   if (item === -1) {
     element.classList.add('added');
-    element.classList.remove('remove');
     sliders.push(img);
-  }else if(item === 1){
-    element.classList.add('remove');
-    element.classList.remove('added');
-    sliders.pop(img);
   }else{
-    element.classList.add('remove');
     element.classList.remove('added');
     sliders.pop(img);
   }
@@ -84,14 +78,11 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   })
   changeSlide(0)
-  if (duration > 0) {
-    timer = setInterval(function () {
-      slideIndex++;
-      changeSlide(slideIndex);
-    }, duration);
-  } else {
-    alert("nagative number is not allowed");
-  }
+  
+  // timer = setInterval(function () {
+  //   slideIndex++;
+  //   changeSlide(slideIndex);
+  // }, duration);
 }
 
 // change slider index 
@@ -138,7 +129,17 @@ function enterKeyPress(search, btn) {
 enterKeyPress('search', 'search-btn');
 enterKeyPress('duration', 'create-slider');
 
-
+// Nagative value is not allowed
 sliderBtn.addEventListener('click', function () {
-  createSlider()
-})
+  const duration = document.getElementById('duration').value || 1000;
+  if(duration > 0){
+    //console.log("clicked button");
+    createSlider();
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    }, duration);
+  }else{
+    alert('Nagative value is not allowed');
+  }
+});
